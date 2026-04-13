@@ -1,0 +1,261 @@
+{
+  "$schema": "https://openclaw.example.com/schemas/access_control.json",
+  "version": "1.0.0",
+  "lastUpdated": "2025-01-01T00:00:00+08:00",
+  "description": "硅基军团访问控制矩阵 · RBAC权限配置",
+
+  "roles": {
+    "admin": {
+      "displayName": "系统管理员",
+      "description": "最高权限，可管理所有Agent和配置",
+      "permissions": [
+        "agent:*",
+        "config:*",
+        "security:*",
+        "audit:*",
+        "skill:*",
+        "knowledge:*",
+        "user:*"
+      ]
+    },
+    "chief_of_staff": {
+      "displayName": "幕僚长",
+      "description": "主Agent调度权限，可访问所有专业Agent",
+      "permissions": [
+        "agent:read",
+        "agent:execute",
+        "agent:route",
+        "skill:*",
+        "knowledge:*",
+        "task:create",
+        "task:read",
+        "task:cancel",
+        "audit:read"
+      ]
+    },
+    "department_head": {
+      "displayName": "部门负责人",
+      "description": "部门级权限，访问本部门相关Agent",
+      "permissions": [
+        "agent:read",
+        "agent:execute",
+        "skill:read",
+        "knowledge:read",
+        "task:create",
+        "task:read",
+        "audit:read"
+      ],
+      "scopedTo": ["own_department"]
+    },
+    "operator": {
+      "displayName": "运维人员",
+      "description": "日常运营操作权限",
+      "permissions": [
+        "agent:read",
+        "task:read",
+        "task:cancel",
+        "skill:read",
+        "knowledge:read",
+        "audit:read"
+      ]
+    },
+    "viewer": {
+      "displayName": "只读用户",
+      "description": "仅可查看任务日志和知识库",
+      "permissions": [
+        "task:read",
+        "skill:read",
+        "knowledge:read",
+        "audit:read"
+      ]
+    },
+    "external_partner": {
+      "displayName": "外部合作伙伴",
+      "description": "受限权限，仅访问指定资源",
+      "permissions": [
+        "agent:read:limited",
+        "task:create:limited",
+        "skill:read:public",
+        "knowledge:read:public"
+      ],
+      "scopedTo": ["approved_resources_only"]
+    }
+  },
+
+  "agent_permissions": {
+    "ProcurementMaterial": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head"],
+      "department": "purchase",
+      "dataSensitivity": "high",
+      "requiresAudit": true
+    },
+    "ProcurementSupplier": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head"],
+      "department": "purchase",
+      "dataSensitivity": "high",
+      "requiresAudit": true
+    },
+    "ProcurementPrice": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head"],
+      "department": "purchase",
+      "dataSensitivity": "high",
+      "requiresAudit": true
+    },
+    "ProductionPlanning": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head"],
+      "department": "production",
+      "dataSensitivity": "medium"
+    },
+    "ProductionScheduling": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head"],
+      "department": "production",
+      "dataSensitivity": "medium"
+    },
+    "ProductionQuality": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head", "operator"],
+      "department": "production",
+      "dataSensitivity": "medium"
+    },
+    "SalesOrder": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head"],
+      "department": "sales",
+      "dataSensitivity": "high",
+      "requiresAudit": true
+    },
+    "SalesQuote": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head"],
+      "department": "sales",
+      "dataSensitivity": "high",
+      "requiresAudit": true
+    },
+    "SalesService": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head", "operator"],
+      "department": "sales",
+      "dataSensitivity": "medium"
+    },
+    "FinanceAccounting": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head"],
+      "department": "finance",
+      "dataSensitivity": "critical",
+      "requiresAudit": true,
+      "multiFactorRequired": true
+    },
+    "FinanceReport": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head"],
+      "department": "finance",
+      "dataSensitivity": "critical",
+      "requiresAudit": true
+    },
+    "FinanceRisk": {
+      "allowedRoles": ["admin", "chief_of_staff"],
+      "department": "finance",
+      "dataSensitivity": "critical",
+      "requiresAudit": true,
+      "multiFactorRequired": true
+    },
+    "OpsEquipment": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head", "operator"],
+      "department": "ops",
+      "dataSensitivity": "low"
+    },
+    "OpsWarehouse": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head", "operator"],
+      "department": "ops",
+      "dataSensitivity": "medium"
+    },
+    "OpsSupplyChain": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head"],
+      "department": "ops",
+      "dataSensitivity": "medium"
+    },
+    "StrategyPlanning": {
+      "allowedRoles": ["admin", "chief_of_staff"],
+      "department": "strategy",
+      "dataSensitivity": "critical"
+    },
+    "StrategyAnalysis": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head"],
+      "department": "strategy",
+      "dataSensitivity": "high"
+    },
+    "StrategyProject": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head", "operator"],
+      "department": "strategy",
+      "dataSensitivity": "medium"
+    },
+    "RD": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head"],
+      "department": "rd",
+      "dataSensitivity": "high"
+    },
+    "HR": {
+      "allowedRoles": ["admin", "chief_of_staff"],
+      "department": "hr",
+      "dataSensitivity": "critical",
+      "requiresAudit": true,
+      "multiFactorRequired": true
+    },
+    "Safety": {
+      "allowedRoles": ["admin", "chief_of_staff", "department_head", "operator"],
+      "department": "safety",
+      "dataSensitivity": "medium"
+    }
+  },
+
+  "data_sensitivity_levels": {
+    "low": {
+      "description": "公开信息，无需特殊保护",
+      "encryption": false,
+      "piiCheck": false,
+      "auditRequired": false
+    },
+    "medium": {
+      "description": "内部信息，需访问控制",
+      "encryption": true,
+      "piiCheck": true,
+      "auditRequired": true
+    },
+    "high": {
+      "description": "敏感信息，需严格审计",
+      "encryption": true,
+      "piiCheck": true,
+      "auditRequired": true,
+      "retentionDays": 180
+    },
+    "critical": {
+      "description": "核心机密，多重验证",
+      "encryption": true,
+      "piiCheck": true,
+      "auditRequired": true,
+      "multiFactorRequired": true,
+      "retentionDays": 365
+    }
+  },
+
+  "api_rate_limits": {
+    "admin": {
+      "requestsPerMinute": 300,
+      "burst": 500
+    },
+    "chief_of_staff": {
+      "requestsPerMinute": 200,
+      "burst": 300
+    },
+    "department_head": {
+      "requestsPerMinute": 100,
+      "burst": 150
+    },
+    "operator": {
+      "requestsPerMinute": 60,
+      "burst": 100
+    },
+    "viewer": {
+      "requestsPerMinute": 30,
+      "burst": 50
+    },
+    "external_partner": {
+      "requestsPerMinute": 20,
+      "burst": 30
+    }
+  }
+}

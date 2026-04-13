@@ -1,0 +1,234 @@
+{
+  "$schema": "https://openclaw.example.com/schemas/audit_log_config.json",
+  "version": "1.0.0",
+  "lastUpdated": "2025-01-01T00:00:00+08:00",
+  "description": "硅基军团审计日志配置 · SOC 2 合规",
+
+  "audit": {
+    "enabled": true,
+    "logPath": "./security/audit_logs",
+    "format": "jsonl",
+    "rotation": {
+      "type": "daily",
+      "maxFileSizeMB": 100,
+      "maxFiles": 90
+    },
+    "retention": {
+      "days": 90,
+      "archiveBeforeDelete": true,
+      "archivePath": "./security/audit_logs/archive"
+    }
+  },
+
+  "events": {
+    "agent_execution": {
+      "enabled": true,
+      "level": "info",
+      "fields": [
+        "timestamp",
+        "agent_id",
+        "agent_name",
+        "role",
+        "task_id",
+        "task_description",
+        "duration_ms",
+        "status",
+        "user_id",
+        "ip_address",
+        "user_agent"
+      ]
+    },
+    "authentication": {
+      "enabled": true,
+      "level": "info",
+      "fields": [
+        "timestamp",
+        "event_type",
+        "user_id",
+        "ip_address",
+        "user_agent",
+        "success",
+        "failure_reason",
+        "mfa_used"
+      ]
+    },
+    "authorization": {
+      "enabled": true,
+      "level": "warning",
+      "fields": [
+        "timestamp",
+        "user_id",
+        "requested_permission",
+        "decision",
+        "reason",
+        "ip_address"
+      ]
+    },
+    "pii_access": {
+      "enabled": true,
+      "level": "info",
+      "fields": [
+        "timestamp",
+        "user_id",
+        "pii_type",
+        "redacted_value",
+        "action",
+        "agent_id"
+      ]
+    },
+    "pii_redaction": {
+      "enabled": true,
+      "level": "info",
+      "fields": [
+        "timestamp",
+        "original_value",
+        "redacted_value",
+        "pii_type",
+        "agent_id"
+      ]
+    },
+    "sensitive_data_export": {
+      "enabled": true,
+      "level": "warning",
+      "fields": [
+        "timestamp",
+        "user_id",
+        "data_type",
+        "record_count",
+        "export_destination",
+        "approval_status"
+      ]
+    },
+    "system_config_change": {
+      "enabled": true,
+      "level": "warning",
+      "fields": [
+        "timestamp",
+        "user_id",
+        "config_key",
+        "old_value_hash",
+        "new_value_hash",
+        "change_reason"
+      ]
+    },
+    "skill_installation": {
+      "enabled": true,
+      "level": "info",
+      "fields": [
+        "timestamp",
+        "skill_name",
+        "skill_version",
+        "installed_by",
+        "source",
+        "security_scan_result"
+      ]
+    },
+    "api_request": {
+      "enabled": true,
+      "level": "debug",
+      "fields": [
+        "timestamp",
+        "method",
+        "endpoint",
+        "user_id",
+        "ip_address",
+        "status_code",
+        "response_time_ms",
+        "rate_limit_remaining"
+      ]
+    },
+    "error": {
+      "enabled": true,
+      "level": "error",
+      "fields": [
+        "timestamp",
+        "error_type",
+        "error_message",
+        "stack_trace",
+        "user_id",
+        "agent_id",
+        "request_id"
+      ]
+    }
+  },
+
+  "alerting": {
+    "enabled": true,
+    "channels": ["log", "webhook"],
+    "rules": [
+      {
+        "name": "failed_login_threshold",
+        "condition": "authentication.failure_count > 5 in 10 minutes",
+        "severity": "high",
+        "action": "notify_admin"
+      },
+      {
+        "name": "pii_exposure",
+        "condition": "pii_access.unauthorized == true",
+        "severity": "critical",
+        "action": "immediate_notify"
+      },
+      {
+        "name": "sensitive_export",
+        "condition": "sensitive_data_export.event == true",
+        "severity": "high",
+        "action": "notify_admin"
+      },
+      {
+        "name": "permission_escalation",
+        "condition": "authorization.decision == denied and requested_permission.level > user.current_level",
+        "severity": "high",
+        "action": "log_and_alert"
+      },
+      {
+        "name": "rate_limit_exceeded",
+        "condition": "api_request.status_code == 429",
+        "severity": "medium",
+        "action": "log"
+      },
+      {
+        "name": "agent_loop",
+        "condition": "agent_execution.count > 100 for same agent in 5 minutes",
+        "severity": "high",
+        "action": "suspend_agent"
+      }
+    ],
+    "webhook": {
+      "enabled": false,
+      "url": "",
+      "authToken": "",
+      "timeout": 5000
+    }
+  },
+
+  "compliance": {
+    "soc2": {
+      "enabled": true,
+      "reportPath": "./security/compliance/soc2_reports",
+      "autoGenerate": true,
+      "schedule": "0 0 1 * *",
+      "fields": [
+        "CC6.1_access_control",
+        "CC6.6_data_encryption",
+        "CC7.1_monitoring",
+        "CC7.2_incident_response",
+        "CC8.1_change_management"
+      ]
+    },
+    "gdpr": {
+      "enabled": true,
+      "piiRetentionDays": 90,
+      "rightToErasure": true,
+      "consentTracking": true
+    }
+  },
+
+  "masking": {
+    "email": "****@****.com",
+    "phone": "****-****-****",
+    "id_card": "**************1234",
+    "bank_card": "****-****-****-****",
+    "api_key": "sk_****",
+    "password": "********"
+  }
+}

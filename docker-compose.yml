@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  silicon-army:
+    image: node:18-alpine
+    container_name: silicon-army
+    working_dir: /app
+    env_file:
+      - .env
+    volumes:
+      - ./Company_Agent_Brain:/app/Company_Agent_Brain
+      - ./security:/app/security
+      - ./logs:/app/logs
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    networks:
+      - company_internal
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  company_internal:
+    driver: bridge
