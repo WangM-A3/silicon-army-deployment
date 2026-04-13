@@ -149,6 +149,117 @@
         "agent_id",
         "request_id"
       ]
+    },
+
+    "mcp_tool_call": {
+      "enabled": true,
+      "level": "info",
+      "fields": [
+        "timestamp",
+        "tool_name",
+        "input_args_sanitized",
+        "session_id",
+        "user_id",
+        "result",
+        "risk_score",
+        "vulnerability_level",
+        "execution_time_ms"
+      ]
+    },
+    "mcp_vulnerability_scan": {
+      "enabled": true,
+      "level": "warning",
+      "fields": [
+        "timestamp",
+        "scan_id",
+        "target",
+        "vulnerabilities",
+        "overall_risk_score",
+        "passed_checks",
+        "failed_checks",
+        "recommendations"
+      ]
+    },
+    "mcp_permission_denied": {
+      "enabled": true,
+      "level": "high",
+      "fields": [
+        "timestamp",
+        "session_id",
+        "user_id",
+        "requested_tool",
+        "required_permission",
+        "user_permission",
+        "gap_analysis",
+        "escalation_required"
+      ]
+    },
+    "mcp_command_injection": {
+      "enabled": true,
+      "level": "critical",
+      "fields": [
+        "timestamp",
+        "tool_name",
+        "session_id",
+        "input_args_sanitized",
+        "matched_pattern",
+        "description",
+        "action_taken",
+        "agent_id"
+      ]
+    },
+    "mcp_ssrf_attempt": {
+      "enabled": true,
+      "level": "critical",
+      "fields": [
+        "timestamp",
+        "tool_name",
+        "session_id",
+        "suspected_url",
+        "description",
+        "action_taken"
+      ]
+    },
+    "mcp_credential_exposure": {
+      "enabled": true,
+      "level": "critical",
+      "fields": [
+        "timestamp",
+        "tool_name",
+        "session_id",
+        "pii_type",
+        "redacted_value",
+        "agent_id",
+        "action_taken"
+      ]
+    },
+    "mcp_rate_limit_exceeded": {
+      "enabled": true,
+      "level": "medium",
+      "fields": [
+        "timestamp",
+        "session_id",
+        "tool_name",
+        "request_count",
+        "limit",
+        "window_seconds"
+      ]
+    },
+    "mcp_soc2_report": {
+      "enabled": true,
+      "level": "info",
+      "fields": [
+        "report_type",
+        "period_start",
+        "period_end",
+        "total_calls",
+        "blocked_count",
+        "flagged_count",
+        "block_rate",
+        "compliance_status",
+        "top_tools",
+        "high_risk_events"
+      ]
     }
   },
 
@@ -167,6 +278,30 @@
         "condition": "pii_access.unauthorized == true",
         "severity": "critical",
         "action": "immediate_notify"
+      },
+      {
+        "name": "mcp_command_injection",
+        "condition": "mcp_command_injection.event == true",
+        "severity": "critical",
+        "action": "immediate_notify"
+      },
+      {
+        "name": "mcp_permission_escalation",
+        "condition": "mcp_permission_denied.escalation_required == true",
+        "severity": "high",
+        "action": "notify_admin"
+      },
+      {
+        "name": "mcp_high_risk_score",
+        "condition": "mcp_tool_call.risk_score > 0.8",
+        "severity": "high",
+        "action": "log_and_alert"
+      },
+      {
+        "name": "mcp_rate_limit_abuse",
+        "condition": "mcp_rate_limit_exceeded.count > 10 in 5 minutes",
+        "severity": "medium",
+        "action": "suspend_session"
       },
       {
         "name": "sensitive_export",
@@ -212,7 +347,10 @@
         "CC6.6_data_encryption",
         "CC7.1_monitoring",
         "CC7.2_incident_response",
-        "CC8.1_change_management"
+        "CC8.1_change_management",
+        "CC6.7_mcp_security_controls",
+        "CC7.3_mcp_audit_trail",
+        "CC9.1_mcp_vulnerability_management"
       ]
     },
     "gdpr": {

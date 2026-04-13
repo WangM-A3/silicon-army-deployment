@@ -15,7 +15,8 @@
         "audit:*",
         "skill:*",
         "knowledge:*",
-        "user:*"
+        "user:*",
+        "mcp:*"
       ]
     },
     "chief_of_staff": {
@@ -30,7 +31,10 @@
         "task:create",
         "task:read",
         "task:cancel",
-        "audit:read"
+        "audit:read",
+        "mcp:read",
+        "mcp:execute",
+        "mcp:audit"
       ]
     },
     "department_head": {
@@ -43,7 +47,9 @@
         "knowledge:read",
         "task:create",
         "task:read",
-        "audit:read"
+        "audit:read",
+        "mcp:read",
+        "mcp:execute"
       ],
       "scopedTo": ["own_department"]
     },
@@ -56,7 +62,17 @@
         "task:cancel",
         "skill:read",
         "knowledge:read",
-        "audit:read"
+        "audit:read",
+        "mcp:read"
+      ]
+    },
+    "security_auditor": {
+      "displayName": "安全审计员",
+      "description": "仅可读取审计日志和安全配置，无执行权限",
+      "permissions": [
+        "audit:read",
+        "mcp:audit",
+        "security:read"
       ]
     },
     "viewer": {
@@ -256,6 +272,10 @@
     "external_partner": {
       "requestsPerMinute": 20,
       "burst": 30
+    },
+    "security_auditor": {
+      "requestsPerMinute": 30,
+      "burst": 50
     }
   }
 }
