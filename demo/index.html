@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>外贸硅基军团 · AI智能获客Demo</title>
+  <meta name="description" content="7×24小时AI自动获客，¥600/条有效询盘，15种语言支持，外贸企业专属AI增长引擎" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --card2: #1c2128;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent-light: #79b8ff;
+      --accent-dim: rgba(88,166,255,0.12);
+      --green: #238636;
+      --green-light: #3fb950;
+      --green-dim: rgba(35,134,54,0.15);
+      --text: #c9d1d9;
+      --text-bright: #f0f6fc;
+      --muted: #8b949e;
+      --warn: #d29922;
+      --danger: #f85149;
+      --gradient-hero: linear-gradient(135deg, #0d1117 0%, #0a1628 50%, #0d1117 100%);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans SC', 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── 顶部导航 ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 60px;
+      background: rgba(13,17,23,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-size: 18px; font-weight: 700;
+      color: var(--accent); letter-spacing: -0.5px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo-icon {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 14px;
+      transition: color 0.2s; font-weight: 400;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      padding: 7px 20px; border-radius: 8px;
+      background: var(--accent); color: #fff; font-size: 13px; font-weight: 600;
+      border: none; cursor: pointer; transition: all 0.2s; text-decoration: none;
+      font-family: inherit;
+    }
+    .nav-cta:hover { background: #3d8bff; transform: translateY(-1px); }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      background: var(--gradient-hero);
+      position: relative; overflow: hidden;
+      padding: 120px 40px 80px;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse 600px 400px at 20% 50%, rgba(88,166,255,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 400px 300px at 80% 30%, rgba(35,134,54,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    /* 网格背景 */
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      align-items: center; position: relative; z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 5px 14px; border-radius: 20px;
+      background: var(--accent-dim); border: 1px solid rgba(88,166,255,0.3);
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      margin-bottom: 24px; letter-spacing: 0.5px;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green-light);
+      animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .hero h1 {
+      font-size: 52px; font-weight: 800; color: var(--text-bright);
+      line-height: 1.15; letter-spacing: -1px; margin-bottom: 20px;
+    }
+    .hero h1 .highlight {
+      background: linear-gradient(90deg, var(--accent), var(--accent-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      font-size: 18px; color: var(--muted); margin-bottom: 36px;
+      line-height: 1.7; font-weight: 300;
+    }
+    .hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+    .btn-primary {
+      padding: 13px 32px; border-radius: 10px;
+      background: var(--accent); color: #fff; font-size: 15px; font-weight: 700;
+      border: none; cursor: pointer; transition: all 0.25s;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      font-family: inherit;
+    }
+    .btn-primary:hover { background: #3d8bff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(88,166,255,0.3); }
+    .btn-ghost {
+      padding: 13px 28px; border-radius: 10px;
+      background: transparent; color: var(--text); font-size: 15px; font-weight: 600;
+      border: 1px solid var(--border); cursor: pointer; transition: all 0.25s;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      font-family: inherit;
+    }
+    .btn-ghost:hover { background: var(--card); border-color: var(--muted); }
+    .hero-stats {
+      display: flex; gap: 40px; margin-top: 48px;
+      padding-top: 32px; border-top: 1px solid var(--border);
+    }
+    .hero-stat-value {
+      font-size: 28px; font-weight: 800; color: var(--text-bright);
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 12px; color: var(--muted); margin-top: 4px; font-weight: 400;
+    }
+    .hero-visual {
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .hero-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .hero-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+    .hero-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .hero-card-title { font-size: 14px; font-weight: 600; color: var(--muted); }
+    .live-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green-light);
+      animation: blink 2s infinite;
+    }
+    .hero-metrics { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .hero-metric { text-align: center; }
+    .hero-metric-val { font-size: 22px; font-weight: 700; color: var(--accent); }
+    .hero-metric-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .hero-ticker {
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 18px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .ticker-icon { font-size: 20px; }
+    .ticker-text { font-size: 13px; color: var(--muted); }
+    .ticker-text strong { color: var(--green-light); }
+
+    /* ── Section通用 ── */
+    .section { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-size: 12px; font-weight: 700; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: 36px; font-weight: 800; color: var(--text-bright);
+      letter-spacing: -0.5px; margin-bottom: 16px; line-height: 1.2;
+    }
+    .section-desc {
+      font-size: 16px; color: var(--muted); margin-bottom: 56px;
+      line-height: 1.7; max-width: 600px;
+    }
+
+    /* ── KPI卡片 ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .kpi-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+      transition: all 0.3s; position: relative; overflow: hidden;
+    }
+    .kpi-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--accent); opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .kpi-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .kpi-card:hover::before { opacity: 1; }
+    .kpi-icon { font-size: 32px; margin-bottom: 16px; }
+    .kpi-value {
+      font-size: 36px; font-weight: 800; color: var(--text-bright);
+      line-height: 1; margin-bottom: 8px;
+    }
+    .kpi-value.green { color: var(--green-light); }
+    .kpi-value.blue { color: var(--accent); }
+    .kpi-label { font-size: 14px; color: var(--muted); font-weight: 400; }
+    .kpi-sub { font-size: 12px; color: var(--muted); margin-top: 6px; opacity: 0.7; }
+
+    /* ── 特性 ── */
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .feature-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px;
+      transition: all 0.3s;
+    }
+    .feature-card:hover { transform: translateY(-4px); border-color: rgba(88,166,255,0.4); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+    .feature-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: var(--accent-dim); border: 1px solid rgba(88,166,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 20px;
+    }
+    .feature-title { font-size: 18px; font-weight: 700; color: var(--text-bright); margin-bottom: 10px; }
+    .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+    .feature-tag {
+      display: inline-block; margin-top: 14px; padding: 3px 10px;
+      border-radius: 6px; font-size: 11px; font-weight: 600;
+      background: var(--green-dim); color: var(--green-light);
+      border: 1px solid rgba(35,134,54,0.3);
+    }
+
+    /* ── 定价 ── */
+    .pricing-section { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 900px; margin: 0 auto; }
+    .pricing-card {
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 40px; position: relative; overflow: hidden;
+      transition: all 0.3s;
+    }
+    .pricing-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(160deg, rgba(88,166,255,0.06) 0%, var(--card) 60%);
+    }
+    .pricing-card.featured::before {
+      content: '推荐方案';
+      position: absolute; top: 20px; right: -30px;
+      background: var(--accent); color: #fff;
+      font-size: 11px; font-weight: 700; padding: 4px 40px;
+      transform: rotate(45deg); letter-spacing: 1px;
+    }
+    .pricing-tier { font-size: 13px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .pricing-name { font-size: 24px; font-weight: 800; color: var(--text-bright); margin-bottom: 8px; }
+    .pricing-price { font-size: 40px; font-weight: 800; color: var(--text-bright); line-height: 1; }
+    .pricing-price span { font-size: 16px; font-weight: 400; color: var(--muted); }
+    .pricing-tagline { font-size: 13px; color: var(--muted); margin-top: 8px; margin-bottom: 28px; }
+    .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .pricing-features li {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 14px; color: var(--text);
+    }
+    .pricing-features li::before {
+      content: '✓'; width: 18px; height: 18px; border-radius: 50%;
+      background: var(--green-dim); color: var(--green-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; flex-shrink: 0;
+    }
+    .pricing-divider { border: none; border-top: 1px solid var(--border); margin: 0 0 24px; }
+
+    /* ── 语言 ── */
+    .lang-section { text-align: center; }
+    .lang-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 800px; margin: 0 auto; }
+    .lang-tag {
+      padding: 8px 18px; border-radius: 20px;
+      background: var(--card); border: 1px solid var(--border);
+      font-size: 14px; color: var(--text);
+      transition: all 0.2s; cursor: default;
+    }
+    .lang-tag:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+    .lang-tag.highlight {
+      background: var(--accent-dim); border-color: var(--accent); color: var(--accent); font-weight: 600;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 100px 40px;
+      background: linear-gradient(160deg, rgba(88,166,255,0.05) 0%, var(--bg) 50%, rgba(35,134,54,0.04) 100%);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .cta-title { font-size: 42px; font-weight: 800; color: var(--text-bright); margin-bottom: 16px; letter-spacing: -0.5px; }
+    .cta-desc { font-size: 16px; color: var(--muted); margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+    /* ── 联系 ── */
+    .contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 900px; margin: 0 auto; }
+    .contact-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px; text-align: center;
+      transition: all 0.3s;
+    }
+    .contact-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+    .contact-icon { font-size: 36px; margin-bottom: 16px; }
+    .contact-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+    .contact-value { font-size: 16px; font-weight: 700; color: var(--text-bright); word-break: break-all; }
+
+    /* ── 页脚 ── */
+    .footer {
+      padding: 32px 40px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 13px; color: var(--muted);
+    }
+    .footer a { color: var(--accent); text-decoration: none; }
+
+    /* ── 动画 ── */
+    .fade-up {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── 响应式 ── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+      .hero h1 { font-size: 38px; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 600px) {
+      .hero { padding: 100px 20px 60px; }
+      .section { padding: 60px 20px; }
+      .hero h1 { font-size: 30px; }
+      .hero-stats { gap: 24px; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .kpi-value { font-size: 28px; }
+      .cta-title { font-size: 30px; }
+      .footer { flex-direction: column; gap: 8px; text-align: center; }
+    }
+
+    /* 滚动条美化 */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+  </style>
+</head>
+<body>
+
+<!-- 导航 -->
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-icon">🤖</div>
+    外贸硅基军团
+  </div>
+  <div class="nav-links">
+    <a href="#features">核心能力</a>
+    <a href="#pricing">定价方案</a>
+    <a href="#languages">语言支持</a>
+    <a href="#contact">联系我们</a>
+  </div>
+  <a href="mailto:contact@siliconarmy.ai" class="nav-cta">立即咨询</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        AI驱动 · 7×24在线
+      </div>
+      <h1>
+        让<span class="highlight">AI</span>替你<br>全天候获客
+      </h1>
+      <p class="hero-desc">
+        外贸硅基军团——基于大语言模型的智能获客系统，<br>
+        自动识别全球买家、撰写多语种开发信、追踪询盘转化。<br>
+        <strong style="color: var(--text); font-weight:600">只按有效询盘付费，降低获客风险。</strong>
+      </p>
+      <div class="hero-actions">
+        <a href="mailto:contact@siliconarmy.ai" class="btn-primary">
+          🚀 免费试用
+        </a>
+        <a href="#features" class="btn-ghost">
+          了解更多 →
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-value">600元</div>
+          <div class="hero-stat-label">/ 条有效询盘</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">15</div>
+          <div class="hero-stat-label">种支持语言</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">24/7</div>
+          <div class="hero-stat-label">全年无休运行</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="hero-card-header">
+          <span class="hero-card-title">📊 本周获客概览</span>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)">
+            <div class="live-dot"></div> 实时
+          </div>
+        </div>
+        <div class="hero-metrics">
+          <div class="hero-metric">
+            <div class="hero-metric-val" id="inq-count">—</div>
+            <div class="hero-metric-lbl">有效询盘</div>
+          </div>
+          <div class="hero-metric">
+            <div class="hero-metric-val" id="open-count">—</div>
+            <div class="hero-metric-lbl">邮件已读</div>
+          </div>
+          <div class="hero-metric">
+            <div class="hero-metric-val" id="reply-count">—</div>
+            <div class="hero-metric-lbl">客户回复</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-ticker" id="ticker-container">
+        <span class="ticker-icon">🔔</span>
+        <span class="ticker-text">系统运行中，等待数据...</span>
+      </div>
+      <div class="hero-card" style="padding:16px 20px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span style="font-size:13px;color:var(--muted)">已覆盖平台：</span>
+          <span style="font-size:12px;padding:3px 10px;border-radius:6px;background:var(--card2);border:1px solid var(--border);color:var(--text)">LinkedIn</span>
+          <span style="font-size:12px;padding:3px 10px;border-radius:6px;background:var(--card2);border:1px solid var(--border);color:var(--text)">Google</span>
+          <span style="font-size:12px;padding:3px 10px;border-radius:6px;background:var(--card2);border:1px solid var(--border);color:var(--text)">海关数据</span>
+          <span style="font-size:12px;padding:3px 10px;border-radius:6px;background:var(--card2);border:1px solid var(--border);color:var(--text)">展会名录</span>
+          <span style="font-size:12px;padding:3px 10px;border-radius:6px;background:var(--accent-dim);border:1px solid rgba(88,166,255,0.3);color:var(--accent)">+更多</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KPI -->
+<section class="section">
+  <div class="section-label">为什么选择我们</div>
+  <h2 class="section-title">用AI重新定义外贸获客</h2>
+  <p class="section-desc">告别传统地毯式推销，硅基军团用大模型智能分析买家需求，精准触达，转化率提升3-5倍。</p>
+  <div class="kpi-grid">
+    <div class="kpi-card fade-up">
+      <div class="kpi-icon">⏰</div>
+      <div class="kpi-value blue">24/7</div>
+      <div class="kpi-label">AI自动运行，全年无休</div>
+      <div class="kpi-sub">无需人工值守，系统自动识别买家并跟进</div>
+    </div>
+    <div class="kpi-card fade-up">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-value green">¥600</div>
+      <div class="kpi-label">每条有效询盘</div>
+      <div class="kpi-sub">成果导向付费，无效不收费，降低企业风险</div>
+    </div>
+    <div class="kpi-card fade-up">
+      <div class="kpi-icon">🌐</div>
+      <div class="kpi-value blue">15+</div>
+      <div class="kpi-label">多语种智能写作</div>
+      <div class="kpi-sub">支持英语、西班牙语、阿拉伯语等15种语言</div>
+    </div>
+    <div class="kpi-card fade-up">
+      <div class="kpi-icon">📈</div>
+      <div class="kpi-value green">3-5x</div>
+      <div class="kpi-label">转化率提升</div>
+      <div class="kpi-sub">AI智能分析买家意图，精准触达目标客户</div>
+    </div>
+  </div>
+</section>
+
+<!-- 核心能力 -->
+<section class="section" id="features">
+  <div class="section-label">Core Capabilities</div>
+  <h2 class="section-title">六大核心能力</h2>
+  <p class="section-desc">从客户发现到成交跟进，AI全链路覆盖，大幅降低人力成本，提升获客效率。</p>
+  <div class="features-grid">
+    <div class="feature-card fade-up">
+      <div class="feature-icon">🔍</div>
+      <div class="feature-title">智能客户发现</div>
+      <div class="feature-desc">AI自动扫描LinkedIn、Google、海关数据库、行业协会名录等多渠道，识别符合画像的潜在买家。</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">✍️</div>
+      <div class="feature-title">多语种开发信</div>
+      <div class="feature-desc">基于买家背景信息，AI自动生成个性化开发信，支持15种语言，本地化表达，提升打开率和回复率。</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">📬</div>
+      <div class="feature-title">智能邮件投递</div>
+      <div class="feature-desc">模拟真人发送节奏，规避反垃圾机制，多IP轮换，支持个性化主题和内容变量替换。</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">询盘转化追踪</div>
+      <div class="feature-desc">实时追踪邮件打开、链接点击、询盘转化全链路，数据面板一目了然，随时掌握获客动态。</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">🤖</div>
+      <div class="feature-title">AI客服接待</div>
+      <div class="feature-desc">7×24小时AI自动回复客户询价，支持产品参数问答、技术文档提取，秒级响应，提升询盘到订单转化。</div>
+      <span class="feature-tag">热门功能</span>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">🌍</div>
+      <div class="feature-title">全球化覆盖</div>
+      <div class="feature-desc">覆盖北美、欧盟、东南亚、中东、拉美等全球主流市场，支持本地化合规要求（GDPR等）。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 定价 -->
+<section class="section pricing-section" id="pricing">
+  <div class="section-label" style="text-align:center">Pricing</div>
+  <h2 class="section-title" style="text-align:center">简单透明的定价</h2>
+  <p class="section-desc" style="text-align:center;margin-left:auto;margin-right:auto">订阅制基础服务 + 成果奖金，按效果付费，让每一分钱都花在刀刃上。</p>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-tier">基础版</div>
+      <div class="pricing-name">标准订阅</div>
+      <div class="pricing-price">¥15,000 <span>/月</span></div>
+      <div class="pricing-tagline">适合快速成长型外贸企业</div>
+      <hr class="pricing-divider" />
+      <ul class="pricing-features">
+        <li>AI智能客户发现（每日上限500条）</li>
+        <li>多语种开发信生成（15种语言）</li>
+        <li>邮件自动投递系统</li>
+        <li>基础数据看板</li>
+        <li>多IP轮换投递支持</li>
+        <li>邮件追踪与打开率统计</li>
+        <li>企业邮箱/域名配置</li>
+      </ul>
+      <a href="mailto:contact@siliconarmy.ai" class="btn-primary" style="width:100%;justify-content:center">
+        预约演示
+      </a>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-tier">旗舰版</div>
+      <div class="pricing-name">成果奖金方案</div>
+      <div class="pricing-price">¥15,000 <span>/月 + ¥600/条</span></div>
+      <div class="pricing-tagline">按有效询盘结算，风险共担</div>
+      <hr class="pricing-divider" />
+      <ul class="pricing-features">
+        <li><strong>订阅版全部功能</strong></li>
+        <li>无限量AI客户发现</li>
+        <li>AI客服24/7自动接待</li>
+        <li>高级数据分析报告</li>
+        <li>专属客户成功经理</li>
+        <li>优先技术响应（4h SLA）</li>
+        <li>行业定制化模型微调</li>
+        <li>全渠道CRM集成（可选）</li>
+      </ul>
+      <a href="mailto:contact@siliconarmy.ai" class="btn-primary" style="width:100%;justify-content:center;background:var(--green)">
+        🏆 获取报价方案
+      </a>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:28px">
+    💡 无效询盘不收费 · 支持月度结算 · 随时可终止订阅
+  </p>
+</section>
+
+<!-- 语言 -->
+<section class="section lang-section" id="languages">
+  <div class="section-label">Multilingual</div>
+  <h2 class="section-title">覆盖全球主流市场语言</h2>
+  <p class="section-desc">AI精准本地化表达，让您的开发信读起来像母语者撰写，自然、专业、可信。</p>
+  <div class="lang-grid">
+    <span class="lang-tag highlight">🇨🇳 中文</span>
+    <span class="lang-tag highlight">🇬🇧 英语</span>
+    <span class="lang-tag highlight">🇪🇸 西班牙语</span>
+    <span class="lang-tag highlight">🇸🇦 阿拉伯语</span>
+    <span class="lang-tag highlight">🇵🇹 葡萄牙语</span>
+    <span class="lang-tag highlight">🇩🇪 德语</span>
+    <span class="lang-tag highlight">🇫🇷 法语</span>
+    <span class="lang-tag highlight">🇮🇹 意大利语</span>
+    <span class="lang-tag highlight">🇯🇵 日语</span>
+    <span class="lang-tag highlight">🇰🇷 韩语</span>
+    <span class="lang-tag highlight">🇷🇺 俄语</span>
+    <span class="lang-tag highlight">🇳🇱 荷兰语</span>
+    <span class="lang-tag highlight">🇹🇷 土耳其语</span>
+    <span class="lang-tag highlight">🇮🇳 印地语</span>
+    <span class="lang-tag highlight">🇹🇭 泰语</span>
+    <span class="lang-tag" style="opacity:0.5">+ 更多语言持续扩展中</span>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-title">准备好用AI获客了吗？</div>
+  <p class="cta-desc">留下您的联系方式，我们将在24小时内为您提供免费演示和定制方案。</p>
+  <div class="hero-actions" style="justify-content:center">
+    <a href="mailto:contact@siliconarmy.ai?subject=我想试用外贸硅基军团" class="btn-primary">
+      📧 发送邮件咨询
+    </a>
+    <a href="tel:18958153509" class="btn-ghost">
+      📞 电话联系
+    </a>
+  </div>
+</section>
+
+<!-- 联系方式 -->
+<section class="section" id="contact">
+  <div class="section-label" style="text-align:center">Contact Us</div>
+  <h2 class="section-title" style="text-align:center">联系我们</h2>
+  <p class="section-desc" style="text-align:center;margin-left:auto;margin-right:auto">多种联系方式，任选其一，我们随时恭候。</p>
+  <div class="contact-grid">
+    <div class="contact-card fade-up">
+      <div class="contact-icon">💬</div>
+      <div class="contact-label">微信</div>
+      <div class="contact-value">silicon_army</div>
+    </div>
+    <div class="contact-card fade-up">
+      <div class="contact-icon">📞</div>
+      <div class="contact-label">电话</div>
+      <div class="contact-value">189 5815 3509</div>
+    </div>
+    <div class="contact-card fade-up">
+      <div class="contact-icon">📧</div>
+      <div class="contact-label">邮箱</div>
+      <div class="contact-value">contact@siliconarmy.ai</div>
+    </div>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer class="footer">
+  <span>© 2026 外贸硅基军团 · siliconarmy.ai</span>
+  <span>Powered by <a href="https://github.com/WangM-A3">@WangM-A3</a> · <a href="mailto:contact@siliconarmy.ai">联系我们</a></span>
+</footer>
+
+<script>
+  // 滚动动画
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => { e.target.classList.add('visible'); }, i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // 模拟实时数据
+  function randomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+  const tickerMessages = [
+    '✅ 新询盘：来自德国的工业设备买家 [5分钟前]',
+    '📬 开发信已送达：巴西进口商 [12分钟前]',
+    '🔔 客户回复：印度客户对产品目录感兴趣 [28分钟前]',
+    '🤖 AI自动跟进：墨西哥买家第3轮邮件已发送 [1小时前]',
+    '📊 本周转化率：12.3%，较上周提升2.1% [2小时前]',
+    '✅ 新询盘：美国德克萨斯州建材采购商 [3小时前]',
+    '✍️ AI生成西班牙语开发信，已发送给32家客户 [4小时前]',
+  ];
+
+  let tickerIndex = 0;
+  const tickerEl = document.getElementById('ticker-container');
+
+  function updateTicker() {
+    const msg = tickerMessages[tickerIndex % tickerMessages.length];
+    tickerEl.innerHTML = `<span class="ticker-icon">🔔</span><span class="ticker-text">${msg}</span>`;
+    tickerIndex++;
+  }
+  updateTicker();
+  setInterval(updateTicker, 5000);
+
+  // 模拟KPI数据
+  document.getElementById('inq-count').textContent = randomInt(12, 38);
+  document.getElementById('open-count').textContent = randomInt(280, 620);
+  document.getElementById('reply-count').textContent = randomInt(18, 45);
+
+  // 数字动画
+  function animateNumber(el, target, suffix = '') {
+    const duration = 1200;
+    const start = 0;
+    const startTime = performance.now();
+    function step(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(start + (target - start) * eased) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  const kpiObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const cards = document.querySelectorAll('.kpi-value');
+        const targets = [24, 600, 15, 3];
+        const suffixes = ['', '', '+', 'x'];
+        cards.forEach((card, i) => {
+          setTimeout(() => animateNumber(card, targets[i], suffixes[i]), i * 150);
+        });
+        kpiObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.kpi-grid').forEach(el => kpiObserver.observe(el));
+</script>
+
+</body>
+</html>
