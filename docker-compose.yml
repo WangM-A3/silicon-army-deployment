@@ -1,0 +1,75 @@
+# =============================================================================
+# 外贸硅基军团 - Docker Compose配置
+# =============================================================================
+
+version: '3.8'
+
+services:
+  # 主应用
+  app:
+    build: .
+    container_name: silicon-army-app
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - DATABASE_URL=sqlite:///data/subscribers.db
+      # MiniMax API
+      - MINIMAX_API_KEY=${MINIMAX_API_KEY}
+      # 支付宝配置
+      - ALIPAY_APP_ID=${ALIPAY_APP_ID}
+      - ALIPAY_PRIVATE_KEY=${ALIPAY_PRIVATE_KEY}
+      - ALIPAY_PUBLIC_KEY=${ALIPAY_PUBLIC_KEY}
+      - ALIPAY_SANDBOX_MODE=${ALIPAY_SANDBOX_MODE:-true}
+      # 微信支付配置
+      - WECHAT_APP_ID=${WECHAT_APP_ID}
+      - WECHAT_MCH_ID=${WECHAT_MCH_ID}
+      - WECHAT_API_KEY=${WECHAT_API_KEY}
+      # 安全配置
+      - SECRET_KEY=${SECRET_KEY}
+      - DOMAIN=${DOMAIN:-localhost}
+      - BASE_URL=${BASE_URL:-http://localhost}
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+    networks:
+      - silicon-network
+
+  # Redis缓存（可选）
+  redis:
+    image: redis:7-alpine
+    container_name: silicon-army-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - silicon-network
+
+  # Nginx反向代理
+  nginx:
+    image: nginx:alpine
+    container_name: silicon-army-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - ./static:/var/www/static:ro
+    depends_on:
+      - app
+    networks:
+      - silicon-network
+
+networks:
+  silicon-network:
+    driver: bridge
+
+volumes:
+  redis-data:

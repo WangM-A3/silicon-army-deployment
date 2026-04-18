@@ -1,0 +1,55 @@
+# ============================================
+# 外贸硅基军团 - Python依赖包
+# ============================================
+
+# Web框架
+Flask==3.0.0
+gunicorn==21.2.0
+Werkzeug==3.0.1
+
+# 数据库
+Flask-SQLAlchemy==3.1.1
+SQLAlchemy==2.0.23
+
+# 支付集成
+alipay-sdk-python==3.7.117
+wechatpayv3==1.2.17
+
+# HTTP请求
+requests==2.31.0
+httpx==0.25.2
+
+# 配置管理
+python-dotenv==1.0.0
+PyYAML==6.0.1
+
+# 日期时间处理
+python-dateutil==2.8.2
+pytz==2023.3
+
+# 安全相关
+cryptography==41.0.7
+PyJWT==2.8.0
+
+# 日志
+coloredlogs==15.0.1
+
+# 限流保护
+flask-limiter==3.5.0
+
+# CORS支持
+flask-cors==4.0.0
+
+# 邮件发送（可选）
+Flask-Mail==0.9.1
+
+# 数据验证
+email-validator==2.1.0
+marshmallow==3.20.1
+
+# 缓存（可选）
+redis==5.0.1
+Flask-Caching==2.1.0
+
+# 工具类
+python-json-logger==2.0.7

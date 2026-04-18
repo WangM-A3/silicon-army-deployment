@@ -1,0 +1,49 @@
+# =============================================================================
+# 外贸硅基军团 - Systemd服务文件
+# =============================================================================
+# 路径: /etc/systemd/system/gunicorn-silicon-army.service
+# =============================================================================
+
+[Unit]
+Description=Gunicorn for 外贸硅基军团
+Documentation=https://docs.silicon-army.com
+After=network.target
+
+[Service]
+# 运行用户和组
+User=www-data
+Group=www-data
+
+# 工作目录
+WorkingDirectory=/var/www/silicon-army
+
+# 虚拟环境
+Environment="PATH=/var/www/silicon-army/venv/bin"
+
+# 启动命令
+ExecStart=/var/www/silicon-army/venv/bin/gunicorn \
+    --config /var/www/silicon-army/gunicorn.conf.py \
+    --chdir /var/www/silicon-army \
+    app:app
+
+# 重启配置
+Restart=on-failure
+RestartSec=5s
+
+# 启动限制
+StartLimitBurst=5
+StartLimitInterval=120
+
+# 日志配置
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gunicorn-silicon-army
+
+# 安全加固（可选）
+# ProtectSystem=strict
+# ProtectHome=true
+# ReadWritePaths=/var/www/silicon-army/data /var/log/gunicorn
+# NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
